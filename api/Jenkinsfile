@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Docker run container') {	
         steps {
-            sh 'docker container run -dt --name api2 -p 8090:8080 muralialakuntla3/api2'
+            sh 'docker container run -dt --name api2 -p 8080:8080 muralialakuntla3/api2'
         }
         }
    
