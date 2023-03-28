@@ -1,10 +1,10 @@
 pipeline {
-    agent any
-//     {
-//         node {
-//       label 'default'
-//         }
-//     }
+    agent 
+    {
+        node {
+      label 'slave-docker'
+        }
+    }
     environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerhub')
     }
