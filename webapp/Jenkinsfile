@@ -1,7 +1,7 @@
 pipeline {
     agent {
     node {
-        label 'slave-docker'
+        label 'docker-slave'
          }
     }
     environment {
@@ -19,7 +19,7 @@ pipeline {
             }
         }
         stage('pushing the docker image into dockerhub') 
-{
+             {
             steps {
                   sh 'docker push muralialakuntla3/webapp'
             }
