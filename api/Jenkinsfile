@@ -10,7 +10,7 @@ pipeline {
     stages{
         stage('Docker Build') {	
         steps {
-            sh 'docker build -t muralialakuntla3/api2 .'
+            sh 'cd api && docker build -t muralialakuntla3/api2 .'
               }
         }
         stage('Docker remove container') {	
