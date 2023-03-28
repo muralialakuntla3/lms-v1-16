@@ -1,9 +1,9 @@
 pipeline {
-    agent any 
-    // optionss {
-    //     buildDiscarder(LogRotator(numToKeepstr: '6')
-    // }
-
+    agent {
+    node {
+        label 'slave-docker'
+         }
+    }
     environment {
         dockerhub=credentials('dockerhub')
     }
