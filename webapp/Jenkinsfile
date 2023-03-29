@@ -1,0 +1,40 @@
+pipeline {
+    agent {
+    node {
+        label 'docker-slave'
+         }
+    }
+    environment {
+    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+    }
+    stages {
+        stage('Building the docker image') {
+            steps {
+                sh 'cd webapp && docker build -t muralialakuntla3/webapp .'
+            }
+        }
+        stage('Logging into dockerhub account') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+        stage('pushing the docker image into dockerhub') 
+             {
+            steps {
+                  sh 'docker push muralialakuntla3/webapp'
+            }
+        }
+
+         stage('Running the docker container') {
+            steps {
+                  sh 'docker container rm --force webapp1'
+                  sh 'docker run -dt -p 8000:80 --name webapp1 muralialakuntla3/webapp'
+            }
+        }
+                stage('Remove old docker images') {
+             steps {
+                 sh 'docker rmi -f muralialakuntla3/webapp'
+            }
+        }
+    }
+}

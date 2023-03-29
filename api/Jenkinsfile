@@ -1,0 +1,59 @@
+pipeline {
+    agent {
+    node {
+        label 'docker-slave'
+         }
+    }
+    environment {
+        dockerhub=credentials('dockerhub')
+    }
+    stages{
+        stage('Docker Build') {	
+        steps {
+            sh 'cd api && docker build -t muralialakuntla3/api2 .'
+              }
+        }
+        stage('Docker remove container') {	
+        steps {
+            sh 'docker container rm -f api2'
+        }
+        }
+        stage('Docker run container') {	
+        steps {
+            sh 'docker container run -dt --name api2 -p 8080:8080 muralialakuntla3/api2'
+        }
+        }
+   
+        stage('Docker Login') {	
+        steps {
+
+            sh 'echo $dockerhub_PSW | docker login -u $dockerhub_USR --password-stdin'
+              }
+        } 
+        stage('Docker Push') {	
+        steps {
+
+            sh 'docker push muralialakuntla3/api2'
+            
+        }
+        }
+        stage('Remove old docker images') {
+             steps {
+                 sh 'docker rmi -f muralialakuntla3/api2'
+            }
+        }
+         stage('creating database container') {
+             steps {
+
+                 sh 'docker container rm --force lmsdb'
+                 sh 'docker run -d -p 5432:5432 --network lms-appnetwork -e  POSTGRES_PASSWORD=password --name lmsdb postgres'
+            }
+        }
+         stage('Running the docker container') {
+            steps {
+                  sh 'docker container rm --force api2'
+                  sh 'docker run -d -p 8080:8080 --network lms-appnetwork -e DATABASE_URL=postgresql://postgres:password@lmsdb:5432/postgres --name api2 -e PORT=8080 -e MODE=local  muralialakuntla3/api2'
+            }
+        }
+    }
+}
