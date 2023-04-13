@@ -1,6 +1,14 @@
 # lms-app
 for internship
-pat --- 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
+###########
+git-pat ###
+
+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
+
+## docker-pat###
+
+dckr_pat_YIi-PtSP0uEZNO-YWartg3rj6hU
+
 #########
 
 
