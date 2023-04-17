@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-deployment
+  name: apideployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      component: api
+      component: api1
   template:
     metadata:
       labels:
-        component: api
+        component: api1
     spec:
       containers:
-        - name: api
+        - name: api1
           image: muralialakuntla3/api2
           imagePullPolicy: Always
           ports:
