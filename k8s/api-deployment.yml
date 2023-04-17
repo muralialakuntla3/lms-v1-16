@@ -23,6 +23,8 @@ spec:
               value: "8080"
             - name: MODE
               value: production
+            - name: DATABASE_URL
+              value: postgresql://postgres:password@10.244.0.81:5432/postgres
             - name: DB_HOST
               value: postgres-cluster-ip-service
             - name: DB_PORT
