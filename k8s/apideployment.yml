@@ -23,6 +23,8 @@ spec:
               value: "8080"
             - name: MODE
               value: production
+            - name: DATABASE_URL
+              value: "postgresql"
             - name: DB_HOST
               value: postgres-deployment
             - name: DB_PORT
