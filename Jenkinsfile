@@ -21,6 +21,11 @@ pipeline {
                 sh 'cd k8s && kubectl apply -f database-persistent-volume-claim.yml'
             }
         }
+              stage('apideployment'){
+            steps {
+                sh 'cd k8s && kubectl apply -f apideployment.yml'
+            }
+        }
               stage('api deployment') {
             steps {
                 sh 'cd k8s && kubectl apply -f api-deployment.yml'
