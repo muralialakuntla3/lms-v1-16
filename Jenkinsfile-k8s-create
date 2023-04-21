@@ -1,0 +1,25 @@
+# k8s 2 node cluster creation #
+pipeline {
+    agent {
+    node {
+        label 'slave'
+         }
+    }
+    stages {
+        stage('create s3 bucket') {
+            steps {
+                sh 'aws s3 mb s3://lms-k8s-cluster'
+            }
+        }
+        stage('create k8s cluster') {
+            steps {
+                sh 'kops create cluster --yes --state=s3://lms-k8s-cluster --zones=ap-south-1b,ap-south-1c --node-count=2 --name=lms.k8s.local'
+            }
+        }
+        stage('validate cluster') {
+            steps {
+                sh 'kops validate cluster --state=s3://lms-k8s-cluster'
+            }
+        } 
+    }
+}
