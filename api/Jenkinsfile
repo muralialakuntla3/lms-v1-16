@@ -10,7 +10,7 @@ pipeline {
     stages{
         stage('Docker Build') {	
         steps {
-            sh 'cd api && docker build -t muralialakuntla3/api2 .'
+            sh 'cd api && docker build -t muralialakuntla3/api .'
               }
         }
         stage('Docker remove container') {	
@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Docker run container') {	
         steps {
-            sh 'docker container run -dt --name api2 -p 8080:8080 muralialakuntla3/api2'
+            sh 'docker container run -dt --name api2 -p 3000:3000 muralialakuntla3/api'
         }
         }
    
@@ -33,13 +33,13 @@ pipeline {
         stage('Docker Push') {	
         steps {
 
-            sh 'docker push muralialakuntla3/api2'
+            sh 'docker push muralialakuntla3/api'
             
         }
         }
         stage('Remove old docker images') {
              steps {
-                 sh 'docker rmi -f muralialakuntla3/api2'
+                 sh 'docker rmi -f muralialakuntla3/api'
             }
         }
          stage('creating database container') {
@@ -52,7 +52,7 @@ pipeline {
          stage('Running the docker container') {
             steps {
                   sh 'docker container rm --force api2'
-                  sh 'docker run -d -p 8080:8080 --network lms-appnetwork -e DATABASE_URL=postgresql://postgres:password@lmsdb:5432/postgres --name api2 -e PORT=8080 -e MODE=local  muralialakuntla3/api2'
+                  sh 'docker run -d -p 3000:3000 --network lms-appnetwork -e DATABASE_URL=postgresql://postgres:password@lmsdb:5432/postgres --name api2 -e PORT=3000 -e MODE=local  muralialakuntla3/api'
             }
         }
     }
