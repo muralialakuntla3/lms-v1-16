@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Building the docker image') {
             steps {
-                sh 'cd webapp && docker build -t muralialakuntla3/webapp .'
+                sh 'cd webapp && docker build -t muralialakuntla3/web .'
             }
         }
         stage('Logging into dockerhub account') {
@@ -21,19 +21,19 @@ pipeline {
         stage('pushing the docker image into dockerhub') 
              {
             steps {
-                  sh 'docker push muralialakuntla3/webapp'
+                  sh 'docker push muralialakuntla3/web'
             }
         }
 
          stage('Running the docker container') {
             steps {
                   sh 'docker container rm --force webapp1'
-                  sh 'docker container run -dt -p 80:80 --name webapp1 muralialakuntla3/webapp'
+                  sh 'docker container run -dt -p 8090:80 --name webapp1 muralialakuntla3/web'
             }
         }
                 stage('Remove old docker images') {
              steps {
-                 sh 'docker rmi -f muralialakuntla3/webapp'
+                 sh 'docker rmi -f muralialakuntla3/web'
             }
         }
     }
