@@ -14,19 +14,19 @@ spec:
     spec:
       containers:
         - name: api
-          image: muralialakuntla3/api2
+          image: muralialakuntla3/api
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - containerPort: 3000
           env:
             - name: PORT
-              value: "8080"
+              value: "3000"
             - name: MODE
               value: production
             - name: DATABASE_URL
               value: postgresql://postgres:password@10.244.0.54:5432/postgres
             - name: DB_HOST
-              value: db-cluster-ip-service
+              value: postgres-cluster-ip-servicie
             - name: DB_PORT
               value: "5432"
             - name: DB_USER
