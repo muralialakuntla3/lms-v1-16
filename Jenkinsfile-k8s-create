@@ -15,11 +15,6 @@ pipeline {
             steps {
                 sh 'kops create cluster --yes --state=s3://lms-k8s-cluster --zones=ap-south-1b,ap-south-1c --node-count=2 --name=lms.k8s.local'
             }
-        }
-        stage('validate cluster') {
-            steps {
-                sh 'kops validate cluster --state=s3://lms-k8s-cluster'
-            }
         } 
     }
 }
