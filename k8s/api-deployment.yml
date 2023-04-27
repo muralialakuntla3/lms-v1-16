@@ -24,7 +24,7 @@ spec:
             - name: MODE
               value: production
             - name: DATABASE_URL
-              value: postgresql://postgres:password@10.244.0.54:5432/postgres
+              value: postgresql://postgres:password@100.96.1.53:5432/postgres
             - name: DB_HOST
               value: postgres-cluster-ip-servicie
             - name: DB_PORT
