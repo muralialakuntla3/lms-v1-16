@@ -1,4 +1,4 @@
-# k8s 2 node cluster deletion #
+// k8s 2 node cluster deletion and s3 bucket deletion //
 pipeline {
     agent {
     node {
