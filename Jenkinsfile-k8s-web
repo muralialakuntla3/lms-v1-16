@@ -1,4 +1,4 @@
-# k8s Jenkins file for frontend before starting this pipeline modify .env file with backend url #
+// k8s Jenkins file for frontend before starting this pipeline modify .env file with backend url //
 pipeline {
     agent {
     node {
