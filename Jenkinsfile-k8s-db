@@ -1,4 +1,4 @@
-// k8s manifest files //
+// k8s manifest file to deploy postgres data base //
 pipeline {
     agent {
     node {
@@ -6,6 +6,11 @@ pipeline {
          }
     }
     stages {
+        stage('validate cluster') {
+            steps {
+                sh 'kops validate cluster --state=s3://lms-k8s-cluster'
+            }
+        }
         stage('DB deployment') {
             steps {
                 sh 'cd k8s && kubectl apply -f db-deployment.yml'
