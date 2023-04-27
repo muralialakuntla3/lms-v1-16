@@ -1,4 +1,4 @@
-# k8s jenkins files before starting this pipeline update the api-deployment.yml with cluster-ip in DATABASE_URL #
+// k8s jenkins files before starting this pipeline update the api-deployment.yml with cluster-ip in DATABASE_URL //
 pipeline {
     agent {
     node {
