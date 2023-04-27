@@ -1,7 +1,8 @@
+// k8s Jenkins file for frontend before starting this pipeline modify .env file with backend url //
 pipeline {
     agent {
     node {
-        label 'docker-slave'
+        label 'slave'
          }
     }
     environment {
@@ -24,17 +25,20 @@ pipeline {
                   sh 'docker push muralialakuntla3/web'
             }
         }
-
-         stage('Running the docker container') {
+        stage('Remove old docker images') {
             steps {
-                  sh 'docker container rm --force webapp1'
-                  sh 'docker container run -dt -p 8090:80 --name webapp1 muralialakuntla3/web'
-            }
-        }
-                stage('Remove old docker images') {
-             steps {
                  sh 'docker rmi -f muralialakuntla3/web'
             }
         }
+        stage('frontend deployment') {
+            steps {
+                sh 'cd k8s && kubectl apply -f web-deployment.yml'
+            }
+        }
+        stage('frontend lb-service') {
+            steps {
+                sh 'cd k8s && kubectl apply -f web-lb-service.yml'
+            }
+        }         
     }
 }
