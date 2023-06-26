@@ -1,7 +1,8 @@
 # installation of nginx and unzip
 
 sudo apt install nginx -y
-Sudo apt install unzip
+Sudo apt install unzip -y
+sudo apt install zip -y
 
 # java installation
 
