@@ -1,14 +1,34 @@
 pipeline {
-    agent {
-    node {
-        label 'slave'
-         }
-    }
-    environment {
-        dockerhub=credentials('dockerhub')
-    }
-    stages{
-        stage('Docker Build') {	
+   agent any
+
+    stages {
+        stage('Sonar Analysis') {
+            steps {
+                echo 'Testing..'
+                sh 'cd api && sudo docker run  --rm -e SONAR_HOST_URL="http://65.1.132.50:9000" -e SONAR_LOGIN="sqp_23db14aac1a6abdbb26d03f66c2a161eef6b52ea"  -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+            }
+        }
+
+        stage('Build LMS') {
+            steps {
+                echo 'Building..'
+                sh 'cd api && npm install && npm run build'
+            }
+        }
+
+        stage('Release LMS') {
+            steps {
+                script {
+                    echo "Releasing.."       
+                    def packageJSON = readJSON file: 'webapp/package.json'
+                    def packageJSONVersion = packageJSON.version
+                    echo "${packageJSONVersion}"  
+                    sh "zip webapp/dist-${packageJSONVersion}.zip -r webapp/dist"
+                    sh "curl -v -u admin:amkamk3@ --upload-file webapp/dist-${packageJSONVersion}.zip http://65.1.132.50:8081/repository/lmsfe/"     
+            }
+            }
+        }
+      stage('Docker Build') {	
         steps {
             sh 'cd api && docker build -t muralialakuntla3/api .'
               }
