@@ -37,7 +37,7 @@ pipeline {
         stage('Running the docker container') {
             steps {
                   sh 'docker container rm --force webapp1'
-                  sh 'docker container run -dt -p 80:81 --name webapp1 muralialakuntla3/webapp'
+                  sh 'docker container run -dt -p 81:80 --name webapp1 muralialakuntla3/webapp'
             }
         }
         stage('Remove old docker images') {
