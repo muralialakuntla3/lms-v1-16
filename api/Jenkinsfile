@@ -33,14 +33,10 @@ pipeline {
             sh 'cd api && docker build -t muralialakuntla3/api .'
               }
         }
-        stage('Docker remove container') {	
-        steps {
-//            sh 'docker container rm -f api'
-        }
-        }
         stage('Docker run container') {	
-        steps {
-            sh 'docker container run -dt --name api -p 3000:3000 muralialakuntla3/api'
+          steps {
+//           sh 'docker container rm -f api' 
+             sh 'docker container run -dt --name api -p 3000:3000 muralialakuntla3/api'
         }
         }
    
