@@ -29,21 +29,22 @@ pipeline {
             }
         }
 
-        stage('Deploy LMS') {
+        stage('Building the docker image') {
             steps {
-                script {
-                    echo "Deploying.."       
-                    def packageJSON = readJSON file: 'webapp/package.json'
-                    def packageJSONVersion = packageJSON.version
-                    echo "${packageJSONVersion}"  
-                    sh "curl -u admin:Admin123* -X GET \'http://65.1.132.50:8081/repository/lmsfe/dist-${packageJSONVersion}.zip\' --output dist-'${packageJSONVersion}'.zip"
-                    sh 'sudo rm -rf /var/www/html/*'
- //                   sh "sudo unzip -o dist-'${packageJSONVersion}'.zip"
- //                  sh "sudo cp -r webapp/dist/* /var/www/html"
-            }
+                sh 'cd webapp && docker build -t muralialakuntla3/webapp .'
             }
         }
-
+        stage('Running the docker container') {
+            steps {
+                  sh 'docker container rm --force webapp1'
+                  sh 'docker container run -dt -p 80:80 --name webapp1 muralialakuntla3/webapp'
+            }
+        }
+        stage('Remove old docker images') {
+             steps {
+                 sh 'docker rmi -f muralialakuntla3/webapp'
+            }
+        }
 
     }
 }
