@@ -48,7 +48,7 @@ pipeline {
          stage('creating database container') {
              steps {
                  sh 'docker network create -d bridge lms-appnetwork'
-//                 sh 'docker container rm --force lmsdb'
+                 sh 'docker container rm --force lmsdb'
                  sh 'docker run -d -p 5432:5432 --network lms-appnetwork -e  POSTGRES_PASSWORD=password --name lmsdb postgres'
             }
         }
