@@ -20,11 +20,16 @@ Create Access-Key and Secret-Key
 
 mkdir terraform    ( optional workspace name)
 give provider details in provider.tf
-terraform init
+
+Main commands:
+  terraform init  ------Prepare your working directory for other commands
+  terraform validate ---Check whether the configuration is valid
+  terraform fmt --------Reformat your configuration in the standard style
+  terraform plan   -----Show changes required by the current configuration
+  terraform apply  -----Create or update infrastructure
+  terraform destroy  --- Destroy previously-created infrastructure
+
 
 5. Create Resources
 
-terraform fmt —-----------it will show new/untracked files
-terraform plan ----------it will show which resources will going to change
-terraform apply --yes —----it will create resources
-terraform destroy - -yes —------it will destroy/delete the resources
+
