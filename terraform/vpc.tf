@@ -31,15 +31,24 @@ resource "aws_subnet" "lms-pvt-sn" {
     Name = "lms private subnet"
   }
 }
-# NAT GATEWAY
+# AWS ELASTIC IP
+resource "aws_eip" "lms-eip" {
+  vpc      = true
+  tags = {
+    Name = "lms eip"
+  }
+}
 
+# AWS NAT GATEWAY
 resource "aws_nat_gateway" "lms-nat" {
-  connectivity_type = "private"
-  subnet_id     = aws_subnet.lms-pvt-sn.id
+  allocation_id = aws_eip.lms-eip.id
+  subnet_id     = aws_subnet.lms-pub-sn.id
 
   tags = {
-    Name = "lms nat gw"
+    Name = "NAT GW"
   }
+
+  depends_on = [aws_internet_gateway.lms-igw] 
 }
 # INTERNET GATEWAY
 resource "aws_internet_gateway" "lms-igw" {
@@ -92,22 +101,3 @@ resource "aws_route_table_association" "lms-pvt-asc" {
   route_table_id = aws_route_table.lms-pvt-rt.id
 }
 
-# AWS ELASTIC IP
-resource "aws_eip" "lms-eip" {
-  vpc      = true
-  tags = {
-    Name = "lms eip"
-  }
-}
-
-# AWS NAT GATEWAY
-resource "aws_nat_gateway" "ecomm-nat" {
-  allocation_id = aws_eip.ecomm-eip.id
-  subnet_id     = aws_subnet.ecomm-pub-sn.id
-
-  tags = {
-    Name = "NAT GW"
-  }
-
-  depends_on = [aws_internet_gateway.ecomm-igw] 
-}
