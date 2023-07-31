@@ -54,11 +54,15 @@
       name: nginx
       enabled: yes
 
+  - name: import repositary
+    shell: git clone -b terraform https://muralialakuntla3-admin@bitbucket.org/muralialakuntla3/lms-app.git
+  
   - name: Check if container is running
     shell: docker ps
 
   - name: build docker image
-    shell: docker build -t muralialakuntla3/web ../webapp/.
+    shell: cd lms-app/webapp/
+    shell: docker build -t muralialakuntla3/web .
 
   - name: run docker container
     shell: docker run -dt --name web -p 80:80 muralialakuntla3/web
