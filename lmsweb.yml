@@ -40,9 +40,9 @@
       enabled: yes
 
     - name: Install nginx
-    apt:
-      name: nginx
-      state: present
+      apt:
+        name: nginx
+        state: present
 
   - name: Start nginx
     service:
