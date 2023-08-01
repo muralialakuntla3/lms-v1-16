@@ -1,0 +1,29 @@
+---
+- hosts: lmsapi
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: install docker
+    shell: curl -fsSL https://get.docker.com -o install-docker.sh
+    shell: sudo sh install-docker.sh
+
+  - name: adding sudo permission to docker
+    shell: sudo usermod -aG docker ubuntu
+    shell: newgrp docker
+
+  - name: import repositary
+    shell: git clone -b terraform https://muralialakuntla3-admin@bitbucket.org/muralialakuntla3/lms-app.git
+  
+  - name: create docker network
+    shell: docker network create -d bridge lmsnetwork
+
+  - name: build docker image
+    shell: cd lms-app/api/
+    shell: docker build -t muralialakuntla3/api .
+
+  - name: run postgres container
+    shell: docker run -d --name lmsdb -p 5432:5432 --network lmsnetwork -e POSTGRES_PASSWORD=password postgres 
+
+  - name: run api container
+    shell: docker run -dt --name api1 -p 8080:8080 --network lmsnetwork -e DATABASE_URL=postgresql://postgres:password@lmsdb:5432/postgres -e PORT=8080 -e MODE=development muralialakuntla3/api
+...
