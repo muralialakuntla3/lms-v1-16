@@ -1,3 +1,18 @@
+# Ansible Master 
+resource "aws_instance" "ans_master" {
+  ami           = "ami-0763cf792771fe1bd"
+  instance_type = "t2.micro"
+  subnet_id = aws_subnet.lms-pub-sn.id
+  key_name = "9-key"
+  vpc_security_group_ids = [aws_security_group.allow_ecomm.id]
+  user_data = file("install_ansible.sh")
+  private_ip = "10.0.1.10"
+  
+
+  tags = {
+    Name = "Ansible Master"
+  }
+}
 # Ansible web Node
 resource "aws_instance" "lmsweb" {
   ami           = "ami-08e5424edfe926b43"
@@ -5,7 +20,6 @@ resource "aws_instance" "lmsweb" {
   subnet_id = aws_subnet.lms-pub-sn.id
   key_name = "9-key"
   vpc_security_group_ids = [aws_security_group.lms-sg.id]
-  user_data = file("install_ansible.sh")
   private_ip = "10.0.1.11"
 
   root_block_device {
