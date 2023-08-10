@@ -2,6 +2,12 @@
 
 cd /home/ubuntu
 
+# Check if Node.js is already installed
+if command -v node &>/dev/null; then
+    echo "Node.js is already installed. Skipping installation."
+    exit 0
+fi
+
 # Update package list
 sudo apt update
 
