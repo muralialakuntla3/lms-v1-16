@@ -9,7 +9,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Compiling
-      - cd webapp
+   #   - cd webapp
       - npm run build
   post_build:
     commands:
