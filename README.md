@@ -92,6 +92,11 @@ CI/CD pipeline stages:
 
 #### check pipeline for output
 
+## step-5: Access your Application on EC2
+    
+  #### Browse EC2 instance Publi-ip:80 
+  #### Browse EC2 instance Publi-ip:3000/api 
+
 ## don't forget to delete below resources once over
     EC2 instance
     code deploy
