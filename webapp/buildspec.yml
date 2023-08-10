@@ -3,11 +3,13 @@ phases:
   pre_build:
     commands:
       #installs dependencies into the node_modules/ directory
+      - cd webapp
       - npm install
   build:
     commands:
       - echo Build started on `date`
       - echo Compiling
+      - cd webapp
       - npm run build
   post_build:
     commands:
