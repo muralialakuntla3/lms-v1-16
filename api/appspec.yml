@@ -22,7 +22,7 @@ hooks:
       timeout: 1000
       runas: root
     - location: scripts/setup_postgresql.sh
-      timeout: 1000
+      timeout: 2000
       runas: root
 
   # During the ApplicationStart deployment lifecycle event, run the commands
