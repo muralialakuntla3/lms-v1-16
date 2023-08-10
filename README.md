@@ -20,23 +20,23 @@
     Security Group: lms-aws-pipeline (ports: 22, 80, 443, 5432, 3000, ) 
     root Volume: 10 gb
 
- Attach IAM role to it
+ #### Attach IAM role to it
 
   To install the CodeDeploy agent on Ubuntu Server
   For Ubuntu
     https://docs.aws.amazon.com/codedeploy/latest/userguide/codedeploy-agent-operations-install-ubuntu.html
 
   Sign in to the instance.
-  Enter the following commands, one after the other:
-    1. sudo apt update
-    2. sudo apt install ruby-full
-    3. sudo apt install wget
-    4. cd /home/ubuntu
-    5. wget https://aws-codedeploy-ap-south-1.s3.ap-south-1.amazonaws.com/latest/install
-    6. chmod +x ./install
-    7. sudo ./install auto
-    8. sudo service codedeploy-agent start
-    9. sudo service codedeploy-agent status
+#### Enter the following commands, one after the other
+    1: sudo apt update
+    2: sudo apt install ruby-full
+    3: sudo apt install wget
+    4: cd /home/ubuntu
+    5: wget https://aws-codedeploy-ap-south-1.s3.ap-south-1.amazonaws.com/latest/install
+    6: chmod +x ./install
+    7: sudo ./install auto
+    8: sudo service codedeploy-agent start
+    9: sudo service codedeploy-agent status
 
 ## Step-3 : Code Deploy
 
@@ -50,7 +50,7 @@
     Deployment type: in-place
     env config: ec2 instance (name: aws-pipeline)
     no load balancer
-  #### create deployment
+  #### click create deployment
 
 ## Step-4 : Create Code pipeline using Github, Code build 
 CI/CD pipeline stages:
@@ -88,7 +88,7 @@ CI/CD pipeline stages:
         stage-2
         stage-3
         stage-4
-        click create pipeline
+   #### click create pipeline
 
 #### check pipeline for output
 
