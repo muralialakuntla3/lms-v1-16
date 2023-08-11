@@ -13,6 +13,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Compiling
+      - cd api
       - npm run build
      # - NODE_PORT=3000 pm2 start -i 0 build/src/index.js
   post_build:
