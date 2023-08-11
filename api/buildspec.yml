@@ -4,8 +4,8 @@ phases:
     commands:
       #installs dependencies into the node_modules/ directory
       - cd api
-     # - chmod +x ./scripts/setup_postgresql.sh  # Ensure the script is executable
-     # - ./scripts/setup_postgresql.sh  # Execute the shell script for PostgreSQL setup
+      - chmod +x ./scripts/setup_postgresql.sh  # Ensure the script is executable
+      - ./scripts/setup_postgresql.sh  # Execute the shell script for PostgreSQL setup
       - npm install
      # - sudo npm install pm2 -g
      # - sudo npx prisma db push
@@ -18,6 +18,7 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
+      - sudo cp package.json build/
     application_start:
       commands:
         - chmod +x ./scripts/app_start.sh  # Ensure the script is executable
