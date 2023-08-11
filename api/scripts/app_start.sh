@@ -14,4 +14,4 @@ npm install
 npm run build
 
 # Start the application with PM2
-NODE_PORT=3000 pm2 start -i 0 src/index.js
+NODE_PORT=3000 pm2 start -i 0 build/index.js
