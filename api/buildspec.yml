@@ -18,10 +18,10 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-  application_start:
-    commands:
-      - chmod +x ./scripts/app_start.sh  # Ensure the script is executable
-      - ./scripts/app_start.sh  # Execute the app_start.sh script
+    application_start:
+      commands:
+        - chmod +x ./scripts/app_start.sh  # Ensure the script is executable
+        - ./scripts/app_start.sh  # Execute the app_start.sh script
       
 # Include only the files required for your application to run.
 artifacts:
