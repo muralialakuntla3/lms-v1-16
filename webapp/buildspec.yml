@@ -20,3 +20,8 @@ artifacts:
     - webapp/appspec.yml
     - webapp/scripts/**/*
     - webapp/dist/**/*
+env:
+  variables:
+    ENV_STAGE: production  # Change this value for different stages
+    REACT_APP_BACKEND_URL: https://localhost:3000/api  # Set the backend API URL here
+
