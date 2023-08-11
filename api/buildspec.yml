@@ -19,10 +19,7 @@ phases:
     commands:
       - echo Build completed on `date`
       - sudo cp package.json build/
-    application_start:
-      commands:
-        - chmod +x ./scripts/app_start.sh  # Ensure the script is executable
-        - ./scripts/app_start.sh  # Execute the app_start.sh script
+      - chmod +x ./scripts/app_start.sh  # Ensure the script is executable
       
 # Include only the files required for your application to run.
 artifacts:
