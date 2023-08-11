@@ -108,7 +108,7 @@ CI/CD pipeline stages:
     code deploy
         application
     code pipeline
-        code build
+    code build
     connections-github
     S3 bucket--empty--delete
     IAM
