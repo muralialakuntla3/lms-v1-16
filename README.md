@@ -15,10 +15,16 @@
 
     name: aws-pipeline
     AMI: ubuntu 20.04
-    Cpu: t2.micro
+    Instance Type: t2.micro
     key: 9-key.pem
-    Security Group: lms-aws-pipeline (ports: 22, 80, 443, 5432, 3000, ) 
-    root Volume: 10 gb
+    Network:
+        vpc: default
+        subnet: default
+        public-ip: enable
+        Security Group: lms-aws-pipeline (ports: 22, 80, 443, 5432, 3000, ) 
+    Configure Storage:
+        root Volume: 10 gb
+        other volume: optional
 
  #### Attach IAM role to it
 
