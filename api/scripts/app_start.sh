@@ -12,8 +12,6 @@ npx prisma db push
 # Install dependencies and build the application
 npm install
 npm run build
-# Move the package.json file to the build/ directory
-mv package.json build/
 
 # Start the application with PM2
 NODE_PORT=3000 pm2 start -i 0 src/index.js
