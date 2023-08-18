@@ -5,16 +5,16 @@ phases:
       #installs dependencies into the node_modules/ directory
       - cd api
       - chmod +x ./scripts/setup_postgresql.sh  # Ensure the script is executable
-      - ./scripts/setup_postgresql.sh  # Execute the shell script for PostgreSQL setup
+      - sudo sh ./scripts/setup_postgresql.sh  # Execute the shell script for PostgreSQL setup
       - npm install
-     # - sudo npm install pm2 -g
-     # - sudo npx prisma db push
+      - sudo npm install pm2 -g
+      - sudo npx prisma db push
   build:
     commands:
       - echo Build started on `date`
       - echo Compiling
       - npm run build
-     # - NODE_PORT=3000 pm2 start -i 0 build/src/index.js
+      - NODE_PORT=3000 pm2 start -i 0 build/index.js
   post_build:
     commands:
       - echo Build completed on `date`
