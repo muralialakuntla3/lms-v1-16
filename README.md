@@ -33,7 +33,7 @@
 
 ### Adding permissions
 
-  	sudo usermod â€“aG docker ubuntu
+  	sudo usermod -aG docker ubuntu
   	newgrp docker
 ## creating the sonar container
 	  sudo docker container run -dt --name sonarqube -p 9000:9000 sonarqube
