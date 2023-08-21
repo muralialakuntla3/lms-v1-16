@@ -61,6 +61,7 @@
     }
 ## 4. Create VPC
 ### VPC COMPONENTS
+#### vpc.tf
     - VPC
     - PUBLIC SUBNET
     - PRIVATE SUBNET
