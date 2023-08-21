@@ -1,36 +1,24 @@
 #!/bin/bash
 
-# installation of nginx and unzip
+# Update package lists
+sudo apt update
 
-sudo apt install nginx -y
-Sudo apt install unzip -y
-sudo apt install zip -y
+# Install necessary packages
+sudo apt install nginx unzip zip openjdk-11-jdk -y
 
-# java installation
+# Add Jenkins repository and install Jenkins
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo gpg --dearmor -o /usr/share/keyrings/jenkins-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/jenkins-archive-keyring.gpg] https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt update
+sudo apt install jenkins
 
-sudo apt install openjdk-11* -y
-
-# jenkins installation
-
-curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
-  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
-echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
-  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
-  /etc/apt/sources.list.d/jenkins.list > /dev/null
-sudo apt-get update
-sudo apt-get install jenkins
-
-# docker installation
-
+# Install Docker
 curl -fsSL https://get.docker.com -o install-docker.sh
 sudo sh install-docker.sh
 # Adding permissions
-sudo usermod –aG docker ubuntu
+sudo usermod -aG docker ubuntu
 newgrp docker
 
-# nodejs installation
-
-curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - 
-sudo apt-get install -y nodejs
-
-
+# Install Node.js
+curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+sudo apt install -y nodejs
