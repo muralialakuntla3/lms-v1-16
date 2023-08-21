@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # installation of nginx and unzip
 
 sudo apt install nginx -y
