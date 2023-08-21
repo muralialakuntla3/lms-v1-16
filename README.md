@@ -115,9 +115,3 @@ Kubectl apply -f web-lb-service.yml
 ## 11. Delete k8s cluster
 
 kops delete cluster --state=s3://lms-k8s-cluster --name=lms.k8s.local --yes 
-
-
-
-
-
-
