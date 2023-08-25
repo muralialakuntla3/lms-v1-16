@@ -1,5 +1,5 @@
 
-# VPC
+# VPC ---65536 ip's
 resource "aws_vpc" "lms-vpc" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
@@ -10,7 +10,7 @@ resource "aws_vpc" "lms-vpc" {
   }
 }
 
-# PUBLIC SUBNET
+# PUBLIC SUBNET---256 ip's
 resource "aws_subnet" "lms-pub-sn" {
   vpc_id     = aws_vpc.lms-vpc.id
   cidr_block = "10.0.1.0/24"
@@ -21,7 +21,7 @@ resource "aws_subnet" "lms-pub-sn" {
   }
 }
 
-# PRIVATE SUBNET
+# PRIVATE SUBNET---256 ip's
 resource "aws_subnet" "lms-pvt-sn" {
   vpc_id     = aws_vpc.lms-vpc.id
   cidr_block = "10.0.2.0/24"
