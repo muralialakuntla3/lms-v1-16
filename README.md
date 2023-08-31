@@ -114,5 +114,7 @@ CI/CD pipeline stages:
     IAM
         Roles
         Policies--custom
+    Cloud Watch 
+        logs -- delete
 
 
