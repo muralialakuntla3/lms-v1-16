@@ -10,7 +10,7 @@ COPY . .
 RUN npm run build
 
 # Docker file for nginx server to serve react app build files (spa routing)
-FROM nginx:alpine
+FROM nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 # This is required to make nginx serve index.html for all routes
 COPY nginx.conf /etc/nginx/conf.d/default.conf 
