@@ -1,15 +1,20 @@
 pipeline {
     agent any
     stages {
+        stage('code status') {
+            steps {
+                sh 'echo code successfully pulled'
+            }
+        }
         stage('Building the docker image') {
             steps {
-                sh 'cd webapp && sudo docker build -t muralialakuntla3/webapp .'
+                sh 'cd webapp && docker build -t muralialakuntla3/webapp .'
             }
         }
          stage('Running the docker container') {
             steps {
                  // sh 'docker container rm --force webapp1'
-                  sh 'sudo docker container run -dt -p 80:80 --name webapp1 muralialakuntla3/webapp'
+                  sh 'docker container run -dt -p 80:80 --name webapp1 muralialakuntla3/webapp'
             }
         }
 
