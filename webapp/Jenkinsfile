@@ -1,78 +1,17 @@
 pipeline {
-    agent {
-    node {
-        label 'docker-slave'
-         }
-    }
-    environment {
-    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-    }
+    agent any
     stages {
-        stage('Sonar Analysis') {
-            steps {
-                echo 'Testing..'
-                sh 'cd webapp && sudo docker run  --rm -e SONAR_HOST_URL="http://65.1.132.50:9000" -e SONAR_LOGIN="sqp_23db14aac1a6abdbb26d03f66c2a161eef6b52ea"  -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
-            }
-        }
-        stage('email notification') {
-            steps {
-               emailext body: 'this is to notify that build job has been started',
- 	           subject: 'jenkins-notification',
-               to: 'mkdigitalservicesnkl@gmail.com',
-               attachLog: true
-        }
-    }
-        stage('Build LMS') {
-            steps {
-                echo 'Building..'
-                sh 'cd webapp && npm install && npm run build'
-            }
-        }
-
-        stage('Release LMS') {
-            steps {
-                script {
-                    echo "Releasing.."       
-                    def packageJSON = readJSON file: 'webapp/package.json'
-                    def packageJSONVersion = packageJSON.version
-                    echo "${packageJSONVersion}"  
-                    sh "zip webapp/dist-${packageJSONVersion}.zip -r webapp/dist"
-                    sh "curl -v -u admin:amkamk3@ --upload-file webapp/dist-${packageJSONVersion}.zip http://65.1.132.50:8081/repository/lmsfe/"     
-            }
-            }
-        }
         stage('Building the docker image') {
             steps {
                 sh 'cd webapp && docker build -t muralialakuntla3/webapp .'
             }
         }
-        stage('Logging into dockerhub account') {
-            steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-            }
-        }
-        stage('pushing the docker image into dockerhub') 
-             {
-            steps {
-                  sh 'docker push muralialakuntla3/webapp'
-            }
-        }
-         stage('approval stage form deployment'){
-            steps{
-                echo "sent notification in slack for approval..."
-                echo "got approval from manager for deployment..."
-            }
-         }
          stage('Running the docker container') {
             steps {
                   sh 'docker container rm --force webapp1'
                   sh 'docker container run -dt -p 80:80 --name webapp1 muralialakuntla3/webapp'
             }
         }
-                stage('Remove old docker images') {
-             steps {
-                 sh 'docker rmi -f muralialakuntla3/webapp'
-            }
-        }
+
     }
 }
