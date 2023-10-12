@@ -1,47 +1,17 @@
 pipeline {
-    agent {
-    node {
-        label 'docker-slave'
-         }
-    }
-    environment {
-        dockerhub=credentials('dockerhub')
-    }
+    agent any
     stages{
         stage('Docker Build') {	
         steps {
             sh 'cd api && docker build -t muralialakuntla3/api .'
               }
         }
-        stage('Docker remove container') {	
-        steps {
-            sh 'docker container rm -f api2'
-        }
-        }
         stage('Docker run container') {	
         steps {
             sh 'docker container run -dt --name api2 -p 3000:3000 muralialakuntla3/api'
-        }
-        }
-   
-        stage('Docker Login') {	
-        steps {
-
-            sh 'echo $dockerhub_PSW | docker login -u $dockerhub_USR --password-stdin'
-              }
-        } 
-        stage('Docker Push') {	
-        steps {
-
-            sh 'docker push muralialakuntla3/api'
-            
-        }
-        }
-        stage('Remove old docker images') {
-             steps {
-                 sh 'docker rmi -f muralialakuntla3/api'
             }
         }
+
          stage('creating database container') {
              steps {
 
