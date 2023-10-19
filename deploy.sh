@@ -1,6 +1,6 @@
 # deploy using docker compose
 
-cd ~/lms-public
+cd ~/lms-app
 
 git pull
 
