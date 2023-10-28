@@ -4,7 +4,7 @@ cd ~/lms-public
 
 git pull
 
-if curl http://localhost:3000; then
+if curl http://localhost:80; then
   docker compose down
 fi
 
