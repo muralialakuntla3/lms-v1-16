@@ -6,7 +6,6 @@ pipeline {
     stages{
         stage('Docker Build') {
             steps {
-		sh 'docker rmi -f muralialakuntla3/frontend'
                 sh 'cd webapp && docker build -t muralialakuntla3/frontend .'
              }
           }
