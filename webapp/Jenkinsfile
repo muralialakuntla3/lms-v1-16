@@ -10,7 +10,7 @@ pipeline {
     stages{
         stage('Docker Build') {
             steps {
-                sh 'cd api && docker build -t muralialakuntla3/frontend .'
+                sh 'cd webapp && docker build -t muralialakuntla3/frontend .'
              }
           }
         stage('Docker Login') {
