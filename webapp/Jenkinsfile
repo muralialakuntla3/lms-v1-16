@@ -1,26 +1,37 @@
 pipeline {
-    agent any
+    agent {
+    node {
+        label 'docker'
+         }
+        }
     environment {
-        dockerhub=credentials('docker')
+    dockerhub=credentials('dockerhub')
     }
-
-    stages {
-        stage('code status') {
+    stages{
+        stage('Docker Build') {
             steps {
-                sh 'echo code successfully pulled'
-            }
-        }
-        stage('Building the docker image') {
+                sh 'cd api && docker build -t muralialakuntla3/frontend .'
+             }
+          }
+        stage('Docker Login') {
             steps {
-                sh 'cd webapp && docker build -t muralialakuntla3/webapp .'
+                sh 'echo $dockerhub_PSW | docker login -u $dockerhub_USR --password-stdin'
             }
-        }
-         stage('Running the docker container') {
+          }
+        stage('Docker Push') {
             steps {
-                 // sh 'docker container rm --force webapp1'
-                  sh 'docker container run -dt -p 80:80 --name webapp1 muralialakuntla3/webapp'
+                sh 'docker push muralialakuntla3/frontend'
             }
-        }
-
-    }
+          }
+        stage('Remove old images') {
+            steps {
+                sh 'docker rmi -f muralialakuntla3/frontend'
+              }
+          }
+        stage('Docker run'){
+            steps{
+                sh 'docker container run -dt --name web -p 80:80 muralialakuntla3/frontend'
+            }
+         }
+	}
 }
