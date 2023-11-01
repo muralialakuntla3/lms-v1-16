@@ -15,17 +15,17 @@ pipeline {
         }
         stage('DB Deployment') {
             steps {
-                sh 'kubectl apply -f db-deployment.yml'
+                sh 'cd k8s && kubectl apply -f db-deployment.yml'
             }
         }
         stage('DB Cluster IP Service') {
             steps {
-                sh 'kubectl apply -f db-cluster-ip-service.yml'
+                sh 'cd k8s && kubectl apply -f db-cluster-ip-service.yml'
             }
         }
         stage('DB Persistent Volume') {
             steps {
-                sh 'kubectl apply -f database-persistent-volume-claim.yml'
+                sh 'cd k8s && kubectl apply -f database-persistent-volume-claim.yml'
             }
         }
         stage('Docker Build') {
@@ -50,12 +50,12 @@ pipeline {
         }
         stage('Update Kubernetes Deployment') {
             steps {
-                sh 'kubectl apply -f api-deployment.yml'
+                sh 'cd k8s && kubectl apply -f api-deployment.yml'
             }
         }
         stage('Update Kubernetes Load Balancer Service') {
             steps {
-                sh 'kubectl apply -f api-lb-service.yml'
+                sh 'cd k8s && kubectl apply -f api-lb-service.yml'
             }
         }
     }
