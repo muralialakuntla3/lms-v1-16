@@ -13,24 +13,9 @@ pipeline {
                 sh 'aws eks --region ap-south-1 update-kubeconfig --name lms-cluster'
             }
         }
-        stage('DB Deployment') {
-            steps {
-                sh 'kubectl apply -f db-deployment.yml'
-            }
-        }
-        stage('DB Cluster IP Service') {
-            steps {
-                sh 'kubectl apply -f db-cluster-ip-service.yml'
-            }
-        }
-        stage('DB Persistent Volume') {
-            steps {
-                sh 'kubectl apply -f database-persistent-volume-claim.yml'
-            }
-        }
         stage('Docker Build') {
             steps {
-                sh 'cd api && docker build -t muralialakuntla3/api .'
+                sh 'cd webapp && docker build -t muralialakuntla3/webapp .'
             }
         }
         stage('Docker Login') {
@@ -40,22 +25,22 @@ pipeline {
         }
         stage('Docker Push') {
             steps {
-                sh 'docker push muralialakuntla3/api'
+                sh 'docker push muralialakuntla3/webapp'
             }
         }
         stage('Remove old docker images') {
             steps {
-                sh 'docker rmi -f muralialakuntla3/api'
+                sh 'docker rmi -f muralialakuntla3/webapp'
             }
         }
         stage('Update Kubernetes Deployment') {
             steps {
-                sh 'kubectl apply -f api-deployment.yml'
+                sh 'cd k8s && kubectl apply -f web-deployment.yml'
             }
         }
         stage('Update Kubernetes Load Balancer Service') {
             steps {
-                sh 'kubectl apply -f api-lb-service.yml'
+                sh 'cd k8s && kubectl apply -f web-lb-service.yml'
             }
         }
     }
