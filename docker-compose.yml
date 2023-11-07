@@ -1,25 +1,27 @@
-# Docker compose start container with env variables
+version: '3'
+
 services:
   local-db:
     image: postgres
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=itjustworks
-      - POSTGRES_DB=mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: itjustworks
+      POSTGRES_DB: mydb
     ports:
       - "5432:5432"
     # volumes: # uncomment to persist data using bind mount
-    # - ./data:/var/lib/postgresql/data
+    #   - ./data:/var/lib/postgresql/data
     # volumes: # uncomment to persist data using named volume
     #   - local-db-data:/var/lib/postgresql/data
 
   api-server:
-    image: lms-public-api
-    build: api/
+    image: lms-api
+    build:
+      context: ./api
     environment:
-      - MODE=local
-      - PORT=3000
-      - DATABASE_URL=postgresql://postgres:itjustworks@local-db:5432/mydb
+      MODE: local
+      PORT: 3000
+      DATABASE_URL: postgres://postgres:itjustworks@local-db:5432/mydb
     ports:
       - "3000:3000"
     restart: on-failure
@@ -28,13 +30,15 @@ services:
 
   web-server:
     image: lms-web
-    build: webapp/
+    build:
+      context: ./webapp
     environment:
-      - MODE=local
-      - API_URL=http://api-server:3000
+      MODE: local
+      API_URL: http://api-server:3000
     ports:
       - "80:80"
     depends_on:
       - api-server
+
 # volumes:
 #   local-db-data: # uncomment to persist data using named volume
