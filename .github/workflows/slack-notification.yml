@@ -1,0 +1,26 @@
+name: Slack Notification
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  send-notification:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Send Slack Notification
+      uses: rtCamp/action-slack-notify@v2
+      with:
+        status: ${{ job.status }}
+        author_name: ${{ github.actor }}
+        title: 'GitHub Notification'
+        author_icon: 'https://avatars.githubusercontent.com/u/12345678?s=60&v=4'  # Replace with your GitHub profile picture URL
+        fields: repo,commit,workflow
+        workflow: ${{ github.workflow }}
+        token: ${{ secrets.SLACK_TOKEN }}
+        channel: '#azure-pipeline'  # Replace with your Slack channel name
