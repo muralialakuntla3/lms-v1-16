@@ -1,2 +1,2 @@
 # lms-app
-checking slack 
+checking slack notification
