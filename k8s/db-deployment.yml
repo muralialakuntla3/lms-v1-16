@@ -12,7 +12,6 @@ spec:
       labels:
         component: postgres
     spec:
-      # volume configuration for the pod
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:
@@ -22,11 +21,23 @@ spec:
           image: postgres
           ports:
             - containerPort: 5432
-          # volume mounting configuration for the container
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
               subPath: postgres
           env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
-              value: password
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: POSTGRES_PASSWORD
