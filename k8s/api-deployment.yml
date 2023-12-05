@@ -17,10 +17,10 @@ spec:
           image: muralialakuntla3/api2
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - containerPort: 3000
           env:
             - name: PORT
-              value: "8080"
+              value: "3000"
             - name: MODE
               value: production
             - name: DATABASE_URL
