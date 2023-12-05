@@ -29,8 +29,6 @@ spec:
                 configMapKeyRef:
                   name: backend-config-map
                   key: MODE
-            - name: DATABASE_URL
-              value: postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
@@ -56,3 +54,5 @@ spec:
                 secretKeyRef:
                   name: postgres-credentials
                   key: POSTGRES_PASSWORD
+            - name: DATABASE_URL
+              value: postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)
