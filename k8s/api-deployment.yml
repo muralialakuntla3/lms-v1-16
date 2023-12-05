@@ -20,18 +20,39 @@ spec:
             - containerPort: 3000
           env:
             - name: PORT
-              value: "3000"
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config-map
+                  key: PORT
             - name: MODE
-              value: production
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config-map
+                  key: MODE
             - name: DATABASE_URL
-              value: postgresql://postgres:password@10.244.0.81:5432/postgres
+              value: postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)
             - name: DB_HOST
-              value: postgres-cluster-ip-service
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config-map
+                  key: DB_HOST
             - name: DB_PORT
-              value: "5432"
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config-map
+                  key: DB_PORT
             - name: DB_USER
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: POSTGRES_USER
             - name: DB_NAME
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: POSTGRES_DB
             - name: DB_PASSWORD
-              value: password
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: POSTGRES_PASSWORD
