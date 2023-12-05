@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-nodeport-service
+spec:
+  type: NodePort  # Changed from LoadBalancer to NodePort
+  ports:
+    - port: 3000   # Port exposed by the service
+      targetPort: 3000  # Port on the pods to which the service sends traffic
+      nodePort: 31000  # NodePort value (customizable within a specific range)
+  selector:
+    component: api   # Selects the pods to be included in this service
