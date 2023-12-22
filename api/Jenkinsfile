@@ -21,7 +21,7 @@ pipeline {
         stage('Docker Push') {
             steps {
                 sh 'docker push muralialakuntla3/backend'
-				sh 'docker container run -dt --name api -p 3000:3000 muralialakuntla3/backend'
+		sh 'docker container run -dt --name api -p 3000:3000 muralialakuntla3/backend'
             }
           }
         stage('Remove old docker images') {
