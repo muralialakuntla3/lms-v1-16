@@ -22,13 +22,13 @@ pipeline {
 						echo "version = ${Version}"
 
 						// Build and push backend image
-						sh "cd api && docker build -t santhoshjakkani/lms-backend-image:${Version} ."
+						sh "cd api && sudo docker build -t santhoshjakkani/lms-backend-image:${Version} ."
 						echo 'build successfull !!'
-						sh "docker push santhoshjakkani/lms-backend-image:${Version}"
+						sh "sudo docker push santhoshjakkani/lms-backend-image:${Version}"
 						echo "lms-backend-image:${Version} pushed to docker hub"
 
 						// Delete the local backend image
-						sh "docker rmi santhoshjakkani/lms-backend-image:${Version}"
+						sh "sudo docker rmi santhoshjakkani/lms-backend-image:${Version}"
 						echo "lms-backend-image:${Version} deleted from local"
 					}
 				}
