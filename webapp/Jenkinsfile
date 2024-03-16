@@ -55,7 +55,7 @@ pipeline {
 						if (containerExists == 'lms-frontend-container') {
                             // Container exists, stop and delete it
                             sh 'sudo docker stop lms-frontend-container'
-                            sh 'sudo docker rm lms-frontend-container'
+                            sh 'sudo docker rm -f lms-frontend-container'
 							echo 'lms-frontend-container deleted'
                         }
 
