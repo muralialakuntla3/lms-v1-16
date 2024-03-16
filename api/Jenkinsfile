@@ -61,7 +61,7 @@ pipeline {
 
                         // Container doesn't exist, create it
 						sh "sudo docker container run -dt --name lms-backend-container --network lmsnetwork -p 3000:3000 -e DATABASE_URL=postgresql://postgres:password@lms-postgres-container:5432/postgres -e PORT=3000 -e MODE=local santhoshjakkani/lms-backend-image:${Version}"
-						echo "successfully running santhoshjakkani/lms-backend-image:${packageJSONVersion} container"
+						echo "successfully running santhoshjakkani/lms-backend-image:${Version} container"
                     }
                 }
             }

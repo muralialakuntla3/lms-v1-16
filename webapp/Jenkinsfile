@@ -1,37 +1,70 @@
 pipeline {
-    agent {
-    node{
-	 label 'docker'
-	}
-    }
-    environment {
-    dockerhub=credentials('dockerhub')
-    }
+    agent any
+    
     stages{
-        stage('Docker Build') {
+	    stage('Frontend Sonar Analysis') {
             steps {
-                sh 'cd webapp && docker build -t muralialakuntla3/frontend .'
-             }
-          }
-        stage('Docker Login') {
-            steps {
-                sh 'echo $dockerhub_PSW | docker login -u $dockerhub_USR --password-stdin'
+                echo 'Code Analyzing..'
+                sh 'cd webapp && sudo docker run --rm -e SONAR_HOST_URL="http://3.137.222.216:9000" -e SONAR_LOGIN="sqp_04d2ee41b5ef56e17472228407611b06114fbdeb"  -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
             }
-          }
-        stage('Docker Push') {
+        }
+		stage('Build and Push Frontend Image') {
             steps {
-                sh 'docker push muralialakuntla3/frontend'
-            }
-          }
-        stage('Remove old images') {
+				script {
+					withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+						// Log in to Docker Hub
+						sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+						echo 'logged in to dockerhub'
+
+						// Read the version from package.json
+						def packageJSON = readJSON file: 'webapp/package.json'
+						def Version = packageJSON.version
+						echo "version = ${Version}"
+
+						// Build and push frontend image
+						sh "cd webapp && sudo docker build -t santhoshjakkani/lms-frontend-image:${Version} ."
+						echo 'build successfull !!'
+						sh "sudo docker push santhoshjakkani/lms-frontend-image:${Version}"
+						echo "lms-frontend-image:${Version} pushed to docker hub"
+
+						// Delete the local frontend image
+						sh "sudo docker rmi santhoshjakkani/lms-frontend-image:${Version}"
+						echo "lms-frontend-image:${Version} deleted from local"
+					}
+				}
+			}
+		}		
+        stage('Run Frontend Container') {
             steps {
-                sh 'docker rmi -f muralialakuntla3/frontend'
-              }
-          }
-        stage('Docker run'){
-            steps{
-                sh 'docker container run -dt --name web -p 80:80 muralialakuntla3/frontend'
+                script {
+                    // Load Docker Hub credentials
+					withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+						// Log in to Docker Hub
+						sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+						echo 'logged in to dockerhub'
+
+						// Read the version from package.json
+						def packageJSON = readJSON file: 'webapp/package.json'
+						def Version = packageJSON.version
+						echo "version = ${Version}"
+
+                        // Check if the container exists
+						def containerExists = sh(script: 'sudo docker ps -a --filter name=lms-frontend-container --format "{{.Names}}"', returnStdout: true).trim()
+						
+						echo "container name: ${containerExists}"
+						if (containerExists == 'lms-frontend-container') {
+                            // Container exists, stop and delete it
+                            sh 'sudo docker stop lms-frontend-container'
+                            sh 'sudo docker rm lms-frontend-container'
+							echo 'lms-frontend-container deleted'
+                        }
+
+                        // Container doesn't exist, create it
+						sh "sudo docker container run -dt --name lms-frontend-container --network lmsnetwork -p 80:80 santhoshjakkani/lms-frontend-image:${Version}"
+						echo "successfully running santhoshjakkani/lms-frontend-image:${Version} container"
+                    }
+                }
             }
-         }
-	}
+        }		
+	}		
 }
