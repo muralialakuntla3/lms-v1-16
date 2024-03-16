@@ -28,7 +28,7 @@ pipeline {
 						echo "lms-frontend-image:${Version} pushed to docker hub"
 
 						// Delete the local frontend image
-						sh "sudo docker rmi santhoshjakkani/lms-frontend-image:${Version}"
+						sh "sudo docker rm -f santhoshjakkani/lms-frontend-image:${Version}"
 						echo "lms-frontend-image:${Version} deleted from local"
 					}
 				}
