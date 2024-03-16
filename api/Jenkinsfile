@@ -65,6 +65,12 @@ pipeline {
                     }
                 }
             }
-        }		
+        }
+	}
+	post {
+		success {
+			echo 'Pipeline A succeeded! Triggering Pipeline B...'
+			build job: 'lms-app-webapp', wait: false
+		}		
 	}		
 }
