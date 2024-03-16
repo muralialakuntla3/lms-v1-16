@@ -60,7 +60,7 @@ pipeline {
                         }
 
                         // Container doesn't exist, create it
-						sh "sudo docker container run -dt --name lms-frontend-container --network lmsnetwork -p 80:80 -e VITE_API_URL=http://3.137.222.216:3000/api santhoshjakkani/lms-frontend-image:${Version}"
+						sh "sudo docker container run -dt --name lms-frontend-container --network lmsnetwork -p 80:80 santhoshjakkani/lms-frontend-image:${Version}"
 						echo "successfully running santhoshjakkani/lms-frontend-image:${Version} container"
                     }
                 }
