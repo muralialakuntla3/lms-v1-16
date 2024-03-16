@@ -1,45 +1,70 @@
 pipeline {
-    agent {
-    node {
-        label 'docker'
-         }
-        }
-    environment {
-    dockerhub=credentials('dockerhub')
-    }
+    agent any
+    
     stages{
-        stage('Docker Build') {
+	    stage('Backend Sonar Analysis') {
             steps {
-                sh 'cd api && docker build -t muralialakuntla3/backend .'
-             }
-          }
-        stage('Docker Login') {
-            steps {
-                sh 'echo $dockerhub_PSW | docker login -u $dockerhub_USR --password-stdin'
+                echo 'Code Analyzing..'
+                sh 'cd api && sudo docker run --rm -e SONAR_HOST_URL="http://3.137.222.216:9000" -e SONAR_LOGIN="sqp_04d2ee41b5ef56e17472228407611b06114fbdeb"  -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
             }
-          }
-        stage('Docker Push') {
-            steps {
-                sh 'docker push muralialakuntla3/backend'
-		sh 'docker container run -dt --name api -p 3000:3000 muralialakuntla3/backend'
-            }
-          }
-        stage('Remove old docker images') {
-            steps {
-                sh 'docker rmi -f muralialakuntla3/backend'
-              }
-          }
-        stage('creating database container') {
-            steps {
-                sh 'docker container rm --force lmsdb'
-                sh 'docker run -d -p 5432:5432 --network lmsnetwork -e POSTGRES_PASSWORD=password --name lmsdb postgres'
-                }
-           }
-        stage('Running the docker container') {
-            steps {
-                sh 'docker container rm --force api'
-                sh 'docker run -d -p 3000:3000 --network lmsnetwork -e DATABASE_URL=postgresql://postgres:password@lmsdb:5432/postgres --name api -e PORT=3000 -e MODE=local muralialakuntla3/backend'
-                }
-              }
         }
-  }
+		stage('Build and Push Backend Image') {
+            steps {
+				script {
+					withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+						// Log in to Docker Hub
+						sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+						echo 'logged in to dockerhub'
+
+						// Read the version from package.json
+						def packageJSON = readJSON file: 'api/package.json'
+						def Version = packageJSON.version
+						echo "version = ${Version}"
+
+						// Build and push backend image
+						sh "cd api && docker build -t santhoshjakkani/lms-backend-image:${Version} ."
+						echo 'build successfull !!'
+						sh "docker push santhoshjakkani/lms-backend-image:${Version}"
+						echo "lms-backend-image:${Version} pushed to docker hub"
+
+						// Delete the local backend image
+						sh "docker rmi santhoshjakkani/lms-backend-image:${Version}"
+						echo "lms-backend-image:${Version} deleted from local"
+					}
+				}
+			}
+		}		
+        stage('Run Backend Container') {
+            steps {
+                script {
+                    // Load Docker Hub credentials
+					withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+						// Log in to Docker Hub
+						sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+						echo 'logged in to dockerhub'
+
+						// Read the version from package.json
+						def packageJSON = readJSON file: 'api/package.json'
+						def Version = packageJSON.version
+						echo "version = ${Version}"
+
+                        // Check if the container exists
+						def containerExists = sh(script: 'sudo docker ps -a --filter name=lms-backend-container --format "{{.Names}}"', returnStdout: true).trim()
+						
+						echo "container name: ${containerExists}"
+						if (containerExists == 'lms-backend-container') {
+                            // Container exists, stop and delete it
+                            sh 'sudo docker stop lms-backend-container'
+                            sh 'sudo docker rm lms-backend-container'
+							echo 'lms-backend-container deleted'
+                        }
+
+                        // Container doesn't exist, create it
+						sh "sudo docker container run -dt --name lms-backend-container --network lmsnetwork -p 3000:3000 -e DATABASE_URL=postgresql://postgres:password@lms-postgres-container:5432/postgres -e PORT=3000 -e MODE=local santhoshjakkani/lms-backend-image:${Version}"
+						echo "successfully running santhoshjakkani/lms-backend-image:${packageJSONVersion} container"
+                    }
+                }
+            }
+        }		
+	}		
+}
