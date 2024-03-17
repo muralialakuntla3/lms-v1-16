@@ -53,11 +53,14 @@ pipeline {
 						
 						echo "container name: ${containerExists}"
 						if (containerExists == 'lms-backend-container') {
-                            // Container exists, stop and delete it
+							// Get the image ID associated with the container
+							def imageId = sh(script: 'sudo docker inspect --format="{{.Image}}" lms-backend-container', returnStdout: true).trim()
+                            
+							// Container exists, stop and delete it
                             sh 'sudo docker stop lms-backend-container'
                             sh 'sudo docker rm lms-backend-container'
-							sh 'sudo docker rmi santhoshjakkani/lms-backend-image:${Version}'
-							echo 'lms-backend-container deleted'
+							sh "sudo docker rmi ${imageId}"
+							echo 'lms-backend-container and its image are deleted'
                         }
 
                         // Container doesn't exist, create it
@@ -68,10 +71,10 @@ pipeline {
             }
         }
 	}
-}
 	//post {
 	//	success {
 	//		echo 'Pipeline A succeeded! Triggering Pipeline B...'
 	//		build job: 'lms-app-webapp', wait: false
 	//	}		
 	//}		
+}
