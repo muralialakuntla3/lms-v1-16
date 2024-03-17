@@ -59,7 +59,7 @@ pipeline {
 							// Container exists, stop and delete it
                             sh 'sudo docker stop lms-backend-container'
                             sh 'sudo docker rm lms-backend-container'
-							echo "image-${imageId}
+							echo "image-${imageId}"
 							sh "sudo docker rmi ${imageId}"
 							echo 'lms-backend-container and its image are deleted'
                         }
