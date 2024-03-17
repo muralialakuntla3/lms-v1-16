@@ -7,7 +7,7 @@ pipeline {
         //        echo 'Code Analyzing..'
         //        sh 'cd api && sudo docker run --rm -e SONAR_HOST_URL="http://3.129.217.107:9000" -e SONAR_LOGIN="sqp_04d2ee41b5ef56e17472228407611b06114fbdeb"  -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
         //    }
-        }
+        //}
 		stage('Build and Push Backend Image') {
             steps {
 				script {
@@ -68,10 +68,10 @@ pipeline {
             }
         }
 	}
+}
 	//post {
 	//	success {
 	//		echo 'Pipeline A succeeded! Triggering Pipeline B...'
 	//		build job: 'lms-app-webapp', wait: false
 	//	}		
 	//}		
-}
