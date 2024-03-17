@@ -53,8 +53,10 @@ pipeline {
 						
 						echo "container name: ${containerExists}"
 						if (containerExists == 'lms-frontend-container') {
-							def imageId = sh(script: 'sudo docker inspect --format="{{.Image}}" lms-backend-container', returnStdout: true).trim()
-                            // Container exists, stop and delete it
+							// Get the image ID associated with the container
+							def imageId = sh(script: 'sudo docker inspect --format="{{.Image}}" lms-frontend-container', returnStdout: true).trim()
+                            
+							// Container exists, stop and delete it
                             sh 'sudo docker stop lms-frontend-container'
                             sh 'sudo docker rm -f lms-frontend-container'
 							sh "sudo docker rmi ${imageId}"
