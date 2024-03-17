@@ -5,7 +5,7 @@ pipeline {
 	    stage('Backend Sonar Analysis') {
             steps {
                 echo 'Code Analyzing..'
-                sh 'cd api && sudo docker run --rm -e SONAR_HOST_URL="http://3.137.222.216:9000" -e SONAR_LOGIN="sqp_04d2ee41b5ef56e17472228407611b06114fbdeb"  -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+                sh 'cd api && sudo docker run --rm -e SONAR_HOST_URL="http://3.129.217.107:9000" -e SONAR_LOGIN="sqp_04d2ee41b5ef56e17472228407611b06114fbdeb"  -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
             }
         }
 		stage('Build and Push Backend Image') {
@@ -56,7 +56,7 @@ pipeline {
                             // Container exists, stop and delete it
                             sh 'sudo docker stop lms-backend-container'
                             sh 'sudo docker rm lms-backend-container'
-							sh 'sudo docker rmi lms-backend-image'
+							sh 'sudo docker rmi santhoshjakkani/lms-backend-image'
 							echo 'lms-backend-container deleted'
                         }
 
@@ -68,10 +68,10 @@ pipeline {
             }
         }
 	}
-	post {
-		success {
-			echo 'Pipeline A succeeded! Triggering Pipeline B...'
-			build job: 'lms-app-webapp', wait: false
-		}		
-	}		
+	//post {
+	//	success {
+	//		echo 'Pipeline A succeeded! Triggering Pipeline B...'
+	//		build job: 'lms-app-webapp', wait: false
+	//	}		
+	//}		
 }
